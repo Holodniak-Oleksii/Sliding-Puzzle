@@ -16,14 +16,13 @@ export class DraggableCell {
     this.view.zIndex = 3;
 
     this.dragging = false;
-    this.dragOffset = { x: 0, y: 0 };
 
     this.view.on("pointerdown", (event) => {
       this.dragging = true;
 
       const pos = event.data.getLocalPosition(this.view.parent);
-      this.dragOffset.x = pos.x - this.view.x;
-      this.dragOffset.y = pos.y - this.view.y;
+      this.view.x = pos.x - this.view.width / 2;
+      this.view.y = pos.y - this.view.height / 2;
 
       DragControllerInstance.startDrag(this);
     });
@@ -37,6 +36,12 @@ export class DraggableCell {
 
   onPointerUp() {
     if (!this.dragging) return;
+
+    const x = Math.round(this.view.x / TILE_SIZE);
+    const y = Math.round(this.view.y / TILE_SIZE);
+    this.view.x = x * TILE_SIZE;
+    this.view.y = y * TILE_SIZE;
+
     this.dragging = false;
   }
 }

@@ -1,3 +1,4 @@
+import { TILE_SIZE } from "../constants";
 import { CollisionController } from "./CollisionController";
 
 class DragController {
@@ -5,7 +6,6 @@ class DragController {
     this.stage = null;
     this.activeItem = null;
     this.collision = null;
-    this.offset = { x: 0, y: 0 };
     this.onPointerMove = this.onPointerMove.bind(this);
     this.onPointerUp = this.onPointerUp.bind(this);
   }
@@ -22,21 +22,20 @@ class DragController {
 
   startDrag(item) {
     this.activeItem = item;
-    this.offset = item.dragOffset;
   }
 
   onPointerMove(event) {
     if (this.activeItem) {
       const pos = event.data.getLocalPosition(this.activeItem.view.parent);
 
-      const target = {
-        x: pos.x - this.offset.x,
-        y: pos.y - this.offset.y,
-      };
-
       const prev = {
         x: this.activeItem.view.x,
         y: this.activeItem.view.y,
+      };
+
+      const target = {
+        x: pos.x - TILE_SIZE / 2,
+        y: pos.y - TILE_SIZE / 2,
       };
 
       this.activeItem?.onPointerMove(this.collision.check(prev, target));

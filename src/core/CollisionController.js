@@ -20,73 +20,45 @@ export class CollisionController {
   }
 
   check(prevPos, targetPos) {
-    const size = TILE_SIZE;
+    let updatedPos = { ...prevPos };
 
-    const snappedX = Math.floor(targetPos.x / size) * size;
-    const snappedY = Math.floor(targetPos.y / size) * size;
-    const snappedPos = { x: snappedX, y: snappedY };
+    const dx = targetPos.x - prevPos.x;
+    const dy = targetPos.y - prevPos.y;
 
+    const lerpFactor = 0.1;
+    const stepX = dx * lerpFactor;
+    const stepY = dy * lerpFactor;
+
+    if (this.canMoveTo({ x: prevPos.x + stepX, y: prevPos.y + stepY })) {
+      updatedPos.x += stepX;
+      updatedPos.y += stepY;
+    } else {
+      if (this.canMoveTo({ x: prevPos.x + stepX, y: prevPos.y })) {
+        updatedPos.x += stepX;
+      }
+      if (this.canMoveTo({ x: updatedPos.x, y: prevPos.y + stepY })) {
+        updatedPos.y += stepY;
+      }
+    }
+
+    return updatedPos;
+  }
+
+  canMoveTo(pos) {
     const corners = [
-      { x: snappedPos.x, y: snappedPos.y },
-      { x: snappedPos.x + size - 1, y: snappedPos.y },
-      { x: snappedPos.x, y: snappedPos.y + size - 1 },
-      { x: snappedPos.x + size - 1, y: snappedPos.y + size - 1 },
+      { x: pos.x, y: pos.y },
+      { x: pos.x + TILE_SIZE - 1, y: pos.y },
+      { x: pos.x, y: pos.y + TILE_SIZE - 1 },
+      { x: pos.x + TILE_SIZE - 1, y: pos.y + TILE_SIZE - 1 },
     ];
 
-    let collision = false;
     for (const corner of corners) {
-      const gridX = Math.floor(corner.x / size);
-      const gridY = Math.floor(corner.y / size);
+      const gridX = Math.floor(corner.x / TILE_SIZE);
+      const gridY = Math.floor(corner.y / TILE_SIZE);
       if (!this.isPassable(gridX, gridY)) {
-        collision = true;
-        break;
+        return false;
       }
     }
-
-    if (!collision) {
-      return snappedPos;
-    }
-
-    const newX = { x: snappedX, y: prevPos.y };
-    const newY = { x: prevPos.x, y: snappedY };
-
-    let canMoveX = true,
-      canMoveY = true;
-
-    for (const corner of [
-      { x: newX.x, y: newX.y },
-      { x: newX.x + size - 1, y: newX.y },
-      { x: newX.x, y: newX.y + size - 1 },
-      { x: newX.x + size - 1, y: newX.y + size - 1 },
-    ]) {
-      const gridX = Math.floor(corner.x / size);
-      const gridY = Math.floor(corner.y / size);
-      if (!this.isPassable(gridX, gridY)) {
-        canMoveX = false;
-        break;
-      }
-    }
-
-    for (const corner of [
-      { x: newY.x, y: newY.y },
-      { x: newY.x + size - 1, y: newY.y },
-      { x: newY.x, y: newY.y + size - 1 },
-      { x: newY.x + size - 1, y: newY.y + size - 1 },
-    ]) {
-      const gridX = Math.floor(corner.x / size);
-      const gridY = Math.floor(corner.y / size);
-      if (!this.isPassable(gridX, gridY)) {
-        canMoveY = false;
-        break;
-      }
-    }
-
-    if (canMoveX && !canMoveY) {
-      return newX;
-    } else if (!canMoveX && canMoveY) {
-      return newY;
-    } else {
-      return prevPos;
-    }
+    return true;
   }
 }
