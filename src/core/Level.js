@@ -1,20 +1,19 @@
-import { Container } from "pixi.js";
 import { EXCLUDED_BLOCK } from "../constants";
-import { BlockFactory } from "../entities/BlockFactory";
-import { StaticCell } from "../entities/StaticCell";
-
+import { StaticCell } from "../entities/Block/Block";
+import { BlockFactory } from "../entities/Block/Factory";
+import { DragControllerInstance } from "./DragController";
 export class Level {
-  constructor(app, levelMap) {
+  constructor(app, levelMap, container) {
     this.app = app;
-    this.container = new Container();
+    this.container = container;
     this.container.sortableChildren = true;
     this.grid = [];
     this.levelMap = levelMap;
-
     this.loadMap();
   }
 
   loadMap() {
+    DragControllerInstance.init(this.app.stage, this.levelMap);
     for (let y = 0; y < this.levelMap.length; y++) {
       const row = this.levelMap[y];
       this.grid[y] = [];

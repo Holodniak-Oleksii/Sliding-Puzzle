@@ -7,7 +7,6 @@ export class Game {
   constructor(app) {
     this.app = app;
     this.loadAssets();
-    // @TODO  change it
     this.levelMap = level1;
   }
 
@@ -28,15 +27,10 @@ export class Game {
   }
 
   startGame() {
-    const rootContainer = new Container();
-    rootContainer.sortableChildren = true;
-    this.app.stage.addChild(rootContainer);
-
     const bg = Sprite.from("background");
     bg.width = this.app.screen.width;
     bg.height = this.app.screen.height;
     bg.zIndex = 0;
-    rootContainer.addChild(bg);
 
     const mapWidth = this.levelMap[0].length * TILE_SIZE;
     const mapHeight = this.levelMap.length * TILE_SIZE;
@@ -47,11 +41,10 @@ export class Game {
     levelWrapper.x = (this.app.screen.width - mapWidth) / 2;
     levelWrapper.y = (this.app.screen.height - mapHeight) / 2;
 
-    rootContainer.addChild(levelWrapper);
+    levelWrapper.addChild(bg);
+    new Level(this.app, this.levelMap, levelWrapper);
 
-    this.level = new Level(this.app, this.levelMap);
-    this.level.container.x = 0;
-    this.level.container.y = 0;
-    levelWrapper.addChild(this.level.container);
+    this.app.stage.addChild(bg);
+    this.app.stage.addChild(levelWrapper);
   }
 }

@@ -7,10 +7,9 @@ import { Game } from "./core/Game";
   await app.init({
     background: "#9a6503",
     width: 1000,
-    height: 700,
+    height: 620,
   });
-
   document.body.appendChild(app.canvas);
-
+  globalThis.__PIXI_APP__ = app;
   new Game(app);
 })();
