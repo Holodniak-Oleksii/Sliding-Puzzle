@@ -25,28 +25,55 @@ class DragController {
   }
 
   onPointerMove(event) {
-    if (this.activeItem) {
-      const pos = event.data.getLocalPosition(this.activeItem.view.parent);
+    if (!this.activeItem || !this.activeItem.dragging) return;
 
+    const pos = event.data.getLocalPosition(this.activeItem.view.parent);
+    const targetGridX = Math.floor(pos.x / TILE_SIZE);
+    const targetGridY = Math.floor(pos.y / TILE_SIZE);
+
+    let currentGridX = this.activeItem.gridX;
+    let currentGridY = this.activeItem.gridY;
+
+    const dx = targetGridX - currentGridX;
+    const dy = targetGridY - currentGridY;
+
+    let stepX = 0;
+    let stepY = 0;
+
+    if (Math.abs(dx) > Math.abs(dy)) {
+      stepX = Math.sign(dx);
+    } else if (dy !== 0) {
+      stepY = Math.sign(dy);
+    }
+
+    const nextGridX = currentGridX + stepX;
+    const nextGridY = currentGridY + stepY;
+
+    if (this.collision.isPassable(nextGridX, nextGridY)) {
       const prev = {
         x: this.activeItem.view.x,
         y: this.activeItem.view.y,
       };
-
       const target = {
-        x: pos.x - TILE_SIZE / 2,
-        y: pos.y - TILE_SIZE / 2,
+        x: nextGridX * TILE_SIZE,
+        y: nextGridY * TILE_SIZE,
       };
 
-      this.activeItem?.onPointerMove(this.collision.check(prev, target));
+      const newPos = this.collision.check(prev, target);
+      this.activeItem.onPointerMove(newPos);
+
+      const dist = Math.hypot(newPos.x - target.x, newPos.y - target.y);
+      if (dist < 1) {
+        this.activeItem.gridX = nextGridX;
+        this.activeItem.gridY = nextGridY;
+      }
     }
   }
 
   onPointerUp() {
     if (this.activeItem) {
-      this.activeItem?.onPointerUp();
+      this.activeItem.onPointerUp();
       this.activeItem = null;
-      this.offset = { x: 0, y: 0 };
     }
   }
 

@@ -41,9 +41,7 @@ export class BorderBlock {
     this.type = "border";
     this.view = new Container();
 
-    const background = new Graphics()
-      .rect(0, 0, TILE_SIZE, TILE_SIZE)
-      .fill(0xff0000);
+    const background = new Graphics().rect(0, 0, TILE_SIZE, TILE_SIZE);
 
     this.view.x = x * TILE_SIZE;
     this.view.y = y * TILE_SIZE;

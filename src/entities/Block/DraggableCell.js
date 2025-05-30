@@ -17,31 +17,25 @@ export class DraggableCell {
 
     this.dragging = false;
 
-    this.view.on("pointerdown", (event) => {
+    this.view.on("pointerdown", () => {
       this.dragging = true;
-
-      const pos = event.data.getLocalPosition(this.view.parent);
-      this.view.x = pos.x - this.view.width / 2;
-      this.view.y = pos.y - this.view.height / 2;
-
       DragControllerInstance.startDrag(this);
     });
   }
 
-  onPointerMove(pos) {
+  onPointerMove(newPos) {
     if (!this.dragging) return;
-    this.view.x = pos.x;
-    this.view.y = pos.y;
+    this.view.x = newPos.x;
+    this.view.y = newPos.y;
   }
 
   onPointerUp() {
     if (!this.dragging) return;
 
-    const x = Math.round(this.view.x / TILE_SIZE);
-    const y = Math.round(this.view.y / TILE_SIZE);
-    this.view.x = x * TILE_SIZE;
-    this.view.y = y * TILE_SIZE;
-
+    this.gridX = Math.round(this.view.x / TILE_SIZE);
+    this.gridY = Math.round(this.view.y / TILE_SIZE);
+    this.view.x = this.gridX * TILE_SIZE;
+    this.view.y = this.gridY * TILE_SIZE;
     this.dragging = false;
   }
 }

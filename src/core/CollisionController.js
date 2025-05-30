@@ -25,7 +25,7 @@ export class CollisionController {
     const dx = targetPos.x - prevPos.x;
     const dy = targetPos.y - prevPos.y;
 
-    const lerpFactor = 0.1;
+    const lerpFactor = 0.3;
     const stepX = dx * lerpFactor;
     const stepY = dy * lerpFactor;
 
