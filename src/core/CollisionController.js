@@ -20,28 +20,13 @@ export class CollisionController {
   }
 
   check(prevPos, targetPos) {
-    let updatedPos = { ...prevPos };
+    // let updatedPos = { ...prevPos };
 
-    const dx = targetPos.x - prevPos.x;
-    const dy = targetPos.y - prevPos.y;
+    // if (this.canMoveTo(snappedPos)) {
+    //   updatedPos = targetPos;
+    // }
 
-    const lerpFactor = 0.3;
-    const stepX = dx * lerpFactor;
-    const stepY = dy * lerpFactor;
-
-    if (this.canMoveTo({ x: prevPos.x + stepX, y: prevPos.y + stepY })) {
-      updatedPos.x += stepX;
-      updatedPos.y += stepY;
-    } else {
-      if (this.canMoveTo({ x: prevPos.x + stepX, y: prevPos.y })) {
-        updatedPos.x += stepX;
-      }
-      if (this.canMoveTo({ x: updatedPos.x, y: prevPos.y + stepY })) {
-        updatedPos.y += stepY;
-      }
-    }
-
-    return updatedPos;
+    return targetPos;
   }
 
   canMoveTo(pos) {

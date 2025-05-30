@@ -1,11 +1,13 @@
 import { TILE_SIZE } from "../constants";
 import { CollisionController } from "./CollisionController";
+import { MoveController } from "./MoveController";
 
 class DragController {
   constructor() {
     this.stage = null;
     this.activeItem = null;
     this.collision = null;
+    this.move = null;
     this.onPointerMove = this.onPointerMove.bind(this);
     this.onPointerUp = this.onPointerUp.bind(this);
   }
@@ -16,6 +18,7 @@ class DragController {
     this.stage.eventMode = "static";
     this.stage.interactive = true;
     this.collision = new CollisionController(levelMap);
+    this.move = new MoveController(levelMap);
     this.stage.on("pointermove", this.onPointerMove);
     this.stage.on("pointerup", this.onPointerUp);
   }
@@ -28,46 +31,18 @@ class DragController {
     if (!this.activeItem || !this.activeItem.dragging) return;
 
     const pos = event.data.getLocalPosition(this.activeItem.view.parent);
-    const targetGridX = Math.floor(pos.x / TILE_SIZE);
-    const targetGridY = Math.floor(pos.y / TILE_SIZE);
 
-    let currentGridX = this.activeItem.gridX;
-    let currentGridY = this.activeItem.gridY;
+    const prev = {
+      x: this.activeItem.view.x,
+      y: this.activeItem.view.y,
+    };
 
-    const dx = targetGridX - currentGridX;
-    const dy = targetGridY - currentGridY;
+    const target = {
+      x: pos.x - TILE_SIZE / 2,
+      y: pos.y - TILE_SIZE / 2,
+    };
 
-    let stepX = 0;
-    let stepY = 0;
-
-    if (Math.abs(dx) > Math.abs(dy)) {
-      stepX = Math.sign(dx);
-    } else if (dy !== 0) {
-      stepY = Math.sign(dy);
-    }
-
-    const nextGridX = currentGridX + stepX;
-    const nextGridY = currentGridY + stepY;
-
-    if (this.collision.isPassable(nextGridX, nextGridY)) {
-      const prev = {
-        x: this.activeItem.view.x,
-        y: this.activeItem.view.y,
-      };
-      const target = {
-        x: nextGridX * TILE_SIZE,
-        y: nextGridY * TILE_SIZE,
-      };
-
-      const newPos = this.collision.check(prev, target);
-      this.activeItem.onPointerMove(newPos);
-
-      const dist = Math.hypot(newPos.x - target.x, newPos.y - target.y);
-      if (dist < 1) {
-        this.activeItem.gridX = nextGridX;
-        this.activeItem.gridY = nextGridY;
-      }
-    }
+    this.activeItem?.onPointerMove(this.move.move(prev, target));
   }
 
   onPointerUp() {
