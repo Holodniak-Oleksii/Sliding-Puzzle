@@ -1,7 +1,7 @@
-import { EXCLUDED_BLOCK } from "../constants";
-import { StaticCell } from "../entities/Block/Block";
-import { BlockFactory } from "../entities/Block/Factory";
-import { DragControllerInstance } from "./DragController";
+import { BLOCK } from "../constants";
+import { DragControllerInstance } from "../controllers/DragController";
+import { StaticCell } from "../entities/Block";
+import { BlockFactory } from "../entities/Factory";
 export class Level {
   constructor(app, levelMap, container) {
     this.app = app;
@@ -9,7 +9,21 @@ export class Level {
     this.container.sortableChildren = true;
     this.grid = [];
     this.levelMap = levelMap;
+    this.updateRepeatedCells();
     this.loadMap();
+  }
+
+  updateRepeatedCells(targetType = "wood") {
+    let count = 0;
+
+    for (let y = 0; y < this.levelMap.length; y++) {
+      for (let x = 0; x < this.levelMap[y].length; x++) {
+        if (this.levelMap[y][x] === targetType) {
+          this.levelMap[y][x] = `${targetType}_${count}`;
+          count++;
+        }
+      }
+    }
   }
 
   loadMap() {
@@ -21,7 +35,7 @@ export class Level {
       for (let x = 0; x < row.length; x++) {
         const symbol = row[x];
 
-        if (EXCLUDED_BLOCK.includes(symbol)) {
+        if (BLOCK.WALL !== symbol) {
           const cell = new StaticCell(x, y);
           this.container.addChild(cell.view);
         }

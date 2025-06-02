@@ -1,15 +1,17 @@
 import { Sprite } from "pixi.js";
-import { TILE_SIZE } from "../../constants";
-import { DragControllerInstance } from "../../core/DragController";
+import { TILE_SIZE } from "../constants";
+import { DragControllerInstance } from "../controllers/DragController";
 
 export class DraggableCell {
-  constructor(x, y, elementType) {
+  constructor(x, y, type, spriteName) {
     this.gridX = x;
     this.gridY = y;
-    this.elementType = elementType;
-    this.view = Sprite.from(elementType);
+    this.type = type;
+    this.view = Sprite.from(spriteName);
     this.view.x = x * TILE_SIZE;
     this.view.y = y * TILE_SIZE;
+    this.view.height = TILE_SIZE;
+    this.view.width = TILE_SIZE;
     this.view.eventMode = "static";
     this.view.cursor = "pointer";
     this.view.anchor.set(0);

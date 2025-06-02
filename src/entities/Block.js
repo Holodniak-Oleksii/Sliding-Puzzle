@@ -1,5 +1,5 @@
 import { Container, Graphics, Sprite } from "pixi.js";
-import { TILE_SIZE } from "../../constants";
+import { BLOCK, TILE_SIZE } from "../constants";
 
 class BaseBlock {
   constructor(x, y, type, options = {}) {
@@ -11,6 +11,8 @@ class BaseBlock {
     this.view = Sprite.from(type);
     this.view.x = x * TILE_SIZE;
     this.view.y = y * TILE_SIZE;
+    this.view.height = TILE_SIZE;
+    this.view.width = TILE_SIZE;
     this.view.zIndex = options.zIndex ?? 2;
     if (options.alpha !== undefined) this.view.alpha = options.alpha;
   }
@@ -18,19 +20,19 @@ class BaseBlock {
 
 export class TargetZone extends BaseBlock {
   constructor(x, y, type) {
-    super(x, y, type, { alpha: 0.7, zIndex: 2 });
+    super(x, y, `-${type}`, { alpha: 0.7, zIndex: 2 });
   }
 }
 
 export class Stone extends BaseBlock {
   constructor(x, y) {
-    super(x, y, "stone", { zIndex: 2 });
+    super(x, y, BLOCK.STONE, { zIndex: 2 });
   }
 }
 
 export class StaticCell extends BaseBlock {
   constructor(x, y) {
-    super(x, y, "cell", { alpha: 0.9, zIndex: 1 });
+    super(x, y, BLOCK.CELL, { alpha: 0.9, zIndex: 1 });
   }
 }
 
@@ -38,13 +40,15 @@ export class BorderBlock {
   constructor(x, y) {
     this.gridX = x;
     this.gridY = y;
-    this.type = "border";
+    this.type = BLOCK.WALL;
     this.view = new Container();
 
     const background = new Graphics().rect(0, 0, TILE_SIZE, TILE_SIZE);
 
     this.view.x = x * TILE_SIZE;
     this.view.y = y * TILE_SIZE;
+    this.view.height = TILE_SIZE;
+    this.view.width = TILE_SIZE;
     this.view.zIndex = 1;
     this.view.addChild(background);
   }

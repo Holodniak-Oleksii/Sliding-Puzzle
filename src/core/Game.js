@@ -1,5 +1,5 @@
 import { Assets, Container, Sprite } from "pixi.js";
-import { TILE_SIZE } from "../constants";
+import { BLOCK, TILE_SIZE } from "../constants";
 import level1 from "../levels/1.json";
 import { Level } from "./Level";
 
@@ -12,14 +12,14 @@ export class Game {
 
   async loadAssets() {
     await Assets.load([
-      { alias: "stone", src: "assets/images/stone.png" },
-      { alias: "wood", src: "assets/images/wood.png" },
-      { alias: "cell", src: "assets/images/cell.png" },
+      { alias: BLOCK.STONE, src: "assets/images/stone.png" },
+      { alias: BLOCK.WOOD, src: "assets/images/wood.png" },
+      { alias: BLOCK.CELL, src: "assets/images/cell.png" },
 
-      { alias: "air", src: "assets/images/air.png" },
-      { alias: "fire", src: "assets/images/fire.png" },
-      { alias: "ground", src: "assets/images/ground.png" },
-      { alias: "water", src: "assets/images/water.png" },
+      { alias: BLOCK.AIR, src: "assets/images/air.png" },
+      { alias: BLOCK.FIRE, src: "assets/images/fire.png" },
+      { alias: BLOCK.GROUND, src: "assets/images/ground.png" },
+      { alias: BLOCK.WATER, src: "assets/images/water.png" },
       { alias: "background", src: "assets/images/background.jpg" },
     ]);
 
