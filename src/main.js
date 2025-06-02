@@ -1,5 +1,5 @@
 import { Application } from "pixi.js";
-import { Game } from "./core/Game";
+import { Menu } from "./core/Menu";
 
 (async () => {
   const app = new Application();
@@ -11,5 +11,5 @@ import { Game } from "./core/Game";
   });
   document.body.appendChild(app.canvas);
   globalThis.__PIXI_APP__ = app;
-  new Game(app);
+  new Menu(app);
 })();

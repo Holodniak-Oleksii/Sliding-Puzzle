@@ -13,13 +13,13 @@ export class Level {
     this.loadMap();
   }
 
-  updateRepeatedCells(targetType = "wood") {
+  updateRepeatedCells() {
     let count = 0;
 
     for (let y = 0; y < this.levelMap.length; y++) {
       for (let x = 0; x < this.levelMap[y].length; x++) {
-        if (this.levelMap[y][x] === targetType) {
-          this.levelMap[y][x] = `${targetType}_${count}`;
+        if (this.levelMap[y][x] === BLOCK.WOOD) {
+          this.levelMap[y][x] = `${BLOCK.WOOD}_${count}`;
           count++;
         }
       }

@@ -20,7 +20,7 @@ class BaseBlock {
 
 export class TargetZone extends BaseBlock {
   constructor(x, y, type) {
-    super(x, y, `-${type}`, { alpha: 0.7, zIndex: 2 });
+    super(x, y, `-${type}`, { alpha: 0.5, zIndex: 2 });
   }
 }
 

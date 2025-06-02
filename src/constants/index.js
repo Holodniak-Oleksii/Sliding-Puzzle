@@ -1,4 +1,4 @@
-export const TILE_SIZE = 64;
+export const TILE_SIZE = 56;
 
 export const BLOCK = {
   WALL: "wall",
