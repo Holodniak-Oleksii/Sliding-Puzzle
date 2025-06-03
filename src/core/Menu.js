@@ -1,4 +1,3 @@
-// src/scenes/Menu.js
 import { Assets, Sprite } from "pixi.js";
 import { Button } from "../entities/Button";
 import level1 from "../levels/1.json";

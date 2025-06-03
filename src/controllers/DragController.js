@@ -1,4 +1,3 @@
-// src/controllers/DragController.js
 import { Rectangle } from "pixi.js";
 import { BLOCK, TARGET_TO_BLOCK, TILE_SIZE } from "../constants";
 import { CollisionController } from "./CollisionController";
