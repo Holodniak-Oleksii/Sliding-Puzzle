@@ -1,34 +1,29 @@
-import { Container, Graphics, Text, TextStyle } from "pixi.js";
+import { Container, Graphics } from "pixi.js";
+import { Label } from "./Label";
 
 export class Button extends Container {
-  constructor({ text, onClick = () => {}, x = 0, y = 0 }) {
+  constructor({
+    text,
+    onClick = () => {},
+    x = 0,
+    y = 0,
+    width = 150,
+    height = 50,
+  }) {
     super();
     this.x = x;
     this.y = y;
-    this.width = 150;
-    this.height = 50;
+    this.width = width;
+    this.height = height;
 
     this.background = new Graphics()
-      .rect(0, 0, 150, 50, 10)
+      .rect(0, 0, width, height, 10)
       .fill({ color: "#9a6503" })
       .stroke({ color: "#513605", width: 2 });
 
     this.addChild(this.background);
 
-    const style = new TextStyle({
-      fontFamily: "Arial",
-      fontSize: 28,
-      fontWeight: "bold",
-      fill: { color: "#fff" },
-      stroke: { color: "#000", width: 3, join: "round" },
-      wordWrap: true,
-      wordWrapWidth: 440,
-    });
-
-    this.label = new Text({
-      text: text,
-      style,
-    });
+    this.label = new Label({ text });
 
     this.label.anchor.set(0.5);
     this.label.x = this.width / 2;

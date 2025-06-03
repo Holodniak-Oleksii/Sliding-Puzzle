@@ -3,12 +3,12 @@ import { BLOCK, TILE_SIZE } from "../constants";
 import { Level } from "./Level";
 
 export class Game {
-  constructor(app, level) {
+  constructor(app, level, onWin) {
     this.app = app;
     this.levelMap = level;
     this.container = new Container();
     this.container.zIndex = 1;
-
+    this.onWin = onWin;
     this.loadAssets();
   }
 
@@ -34,7 +34,7 @@ export class Game {
     this.container.x = (this.app.screen.width - mapWidth) / 2;
     this.container.y = (this.app.screen.height - mapHeight) / 2;
 
-    new Level(this.app, this.levelMap, this.container);
+    new Level(this.app, this.levelMap, this.container, this.onWin);
     this.app.stage.addChild(this.container);
   }
 

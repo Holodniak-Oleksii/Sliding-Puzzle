@@ -1,18 +1,33 @@
+// src/scenes/Menu.js
 import { Assets, Sprite } from "pixi.js";
 import { Button } from "../entities/Button";
 import level1 from "../levels/1.json";
 import level2 from "../levels/2.json";
 import level3 from "../levels/3.json";
 
+import { Label } from "../entities/Label";
 import { Game } from "./Game";
+import { Timer } from "./Timer";
 
 export class Menu {
   constructor(app) {
     this.app = app;
     this.levelsList = [level1, level2, level3];
     this.buttons = [];
+    this.backButton = null;
+
+    this.label = new Label({ text: "" });
+    this.label.y = 35;
+    this.label.x = 25;
+    this.label.visible = false;
+
     this.game = null;
+    this.timer = null;
+
     this.loadAssets();
+
+    this.onWin = this.onWin.bind(this);
+    this.onLose = this.onLose.bind(this);
   }
 
   async loadAssets() {
@@ -43,24 +58,57 @@ export class Menu {
       this.app.stage.addChild(button);
       this.buttons.push(button);
     });
+
+    this.backButton = new Button({
+      text: `Back`,
+      onClick: () => this.showMenu(),
+      x: this.app.screen.width - 125,
+      y: 25,
+      width: 100,
+    });
+
+    this.backButton.visible = false;
+    this.app.stage.addChild(this.backButton);
+    this.app.stage.addChild(this.label);
+  }
+
+  onLose() {
+    this.label.visible = true;
+    this.timer.stop();
+    this.label.text = "You Lose!";
+  }
+
+  onWin() {
+    this.label.visible = true;
+    this.timer.stop();
+    this.label.text = "You Win!";
   }
 
   startGameByLevel(level) {
     this.hideMenu();
-    this.game = new Game(this.app, level);
+    this.game = new Game(this.app, level, () => this.onWin());
+
+    this.label.visible = true;
+    this.timer = new Timer(1, () => this.onLose(), this.label);
+    this.timer.start();
   }
 
   hideMenu() {
+    this.backButton.visible = true;
     this.buttons.forEach((button) => (button.visible = false));
   }
 
   showMenu() {
-    if (this.background) this.background.visible = true;
     this.buttons.forEach((button) => (button.visible = true));
-
+    this.backButton.visible = false;
+    this.label.visible = false;
     if (this.game) {
       this.game.destroy();
       this.game = null;
+    }
+    if (this.timer) {
+      this.timer.stop();
+      this.timer = null;
     }
   }
 }
