@@ -9,6 +9,7 @@ export class Game {
     this.container = new Container();
     this.container.zIndex = 1;
     this.onWin = onWin;
+    this.level = null;
     this.loadAssets();
   }
 
@@ -34,18 +35,20 @@ export class Game {
     this.container.x = (this.app.screen.width - mapWidth) / 2;
     this.container.y = (this.app.screen.height - mapHeight) / 2;
 
-    new Level(this.app, this.levelMap, this.container, this.onWin);
+    this.level = new Level(this.app, this.levelMap, this.container, this.onWin);
     this.app.stage.addChild(this.container);
   }
 
   destroy() {
     if (this.container) {
       this.app.stage.removeChild(this.container);
+      this.levelMap = [];
       this.container.destroy({
         children: true,
         texture: false,
         baseTexture: false,
       });
+      this.level = null;
       this.container = null;
     }
   }

@@ -1,7 +1,7 @@
 import { BLOCK, TARGET_TO_BLOCK } from "../constants";
 import { DragControllerInstance } from "../controllers/DragController";
 import { StaticCell } from "../entities/Block";
-import { BlockFactory } from "../entities/Factory";
+import { FactoryInstance } from "../entities/Factory";
 export class Level {
   constructor(app, levelMap, container, onWin) {
     this.app = app;
@@ -50,7 +50,7 @@ export class Level {
           this.container.addChild(cell.view);
         }
 
-        const block = BlockFactory.createBlock(symbol, x, y);
+        const block = FactoryInstance.createBlock(symbol, x, y);
         if (block) {
           this.container.addChild(block.view);
         }

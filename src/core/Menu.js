@@ -11,7 +11,11 @@ import { Timer } from "./Timer";
 export class Menu {
   constructor(app) {
     this.app = app;
-    this.levelsList = [level1, level2, level3];
+    this.levelsList = [
+      { level: level1, time: 1 },
+      { level: level2, time: 0.75 },
+      { level: level3, time: 0.5 },
+    ];
     this.buttons = [];
     this.backButton = null;
 
@@ -85,10 +89,10 @@ export class Menu {
 
   startGameByLevel(level) {
     this.hideMenu();
-    this.game = new Game(this.app, level, () => this.onWin());
-
+    const levelMapCopy = level.level.map((row) => [...row]);
+    this.game = new Game(this.app, levelMapCopy, () => this.onWin());
     this.label.visible = true;
-    this.timer = new Timer(1, () => this.onLose(), this.label);
+    this.timer = new Timer(level.time, () => this.onLose(), this.label);
     this.timer.start();
   }
 

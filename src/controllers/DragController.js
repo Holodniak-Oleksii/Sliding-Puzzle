@@ -12,7 +12,7 @@ class DragController {
     this.levelMap = [];
     this.onPointerMove = this.onPointerMove.bind(this);
     this.onPointerUp = this.onPointerUp.bind(this);
-    this.testRect = new Rectangle(0, 0, TILE_SIZE, TILE_SIZE);
+    this.shadowRect = new Rectangle(0, 0, TILE_SIZE, TILE_SIZE);
     this.oldItemGrid = { x: 0, y: 0 };
     this.onWin = () => {};
     this.isDraggingEnabled = true;
@@ -53,16 +53,16 @@ class DragController {
       y: this.activeItem.view.y,
     };
 
-    this.testRect.x = prev.x;
-    this.testRect.y = prev.y;
+    this.shadowRect.x = prev.x;
+    this.shadowRect.y = prev.y;
 
     const target = {
       x: pos.x - TILE_SIZE / 2,
       y: pos.y - TILE_SIZE / 2,
     };
 
-    const dx = target.x - this.testRect.x;
-    const dy = target.y - this.testRect.y;
+    const dx = target.x - this.shadowRect.x;
+    const dy = target.y - this.shadowRect.y;
 
     const distance = Math.sqrt(dx * dx + dy * dy);
     if (distance === 0) return;
@@ -72,25 +72,25 @@ class DragController {
 
     for (let i = 0; i < distance; i++) {
       if (stepX !== 0) {
-        this.testRect.x += stepX;
+        this.shadowRect.x += stepX;
         if (
-          this.collision.checkCollisions(this.testRect, this.activeItem.type)
+          this.collision.checkCollisions(this.shadowRect, this.activeItem.type)
         ) {
-          this.testRect.x -= stepX;
+          this.shadowRect.x -= stepX;
         }
       }
 
       if (stepY !== 0) {
-        this.testRect.y += stepY;
+        this.shadowRect.y += stepY;
         if (
-          this.collision.checkCollisions(this.testRect, this.activeItem.type)
+          this.collision.checkCollisions(this.shadowRect, this.activeItem.type)
         ) {
-          this.testRect.y -= stepY;
+          this.shadowRect.y -= stepY;
         }
       }
     }
 
-    this.activeItem.onPointerMove(this.move.move(prev, this.testRect));
+    this.activeItem.onPointerMove(this.move.move(prev, this.shadowRect));
   }
 
   onPointerUp() {

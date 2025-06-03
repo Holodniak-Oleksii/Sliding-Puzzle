@@ -2,7 +2,7 @@ import { Sprite } from "pixi.js";
 import { TILE_SIZE } from "../constants";
 import { DragControllerInstance } from "../controllers/DragController";
 
-export class DraggableCell {
+export class MovingCell {
   constructor(x, y, type, spriteName) {
     this.gridX = x;
     this.gridY = y;

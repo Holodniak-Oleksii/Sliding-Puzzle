@@ -8,7 +8,6 @@ export class Timer {
     this.label = label;
 
     this.remainingTimeMs = this.durationMs;
-    this.intervalId = null;
     this.ticker = new Ticker();
 
     this.updateTimer = this.updateTimer.bind(this);
